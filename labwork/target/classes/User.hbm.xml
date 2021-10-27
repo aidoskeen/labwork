@@ -1,0 +1,60 @@
+<?xml version = "1.0" encoding = "utf-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+        "-//Hibernate/Hibernate Mapping DTD//EN"
+        "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping>
+    <class name="com.example.labwork.model.User" table="userstable" discriminator-value="use">
+        <id name="user_id" type = "int" column = "user_id">
+            <generator class="increment"/>
+        </id>
+
+        <discriminator column="user_type" type="string"/>
+        <property name = "name" column = "name" type = "string"/>
+        <property name = "surname" column = "surname" type = "string"/>
+        <property name = "login" column = "login" type = "string"/>
+        <property name = "password" column = "password" type = "string"/>
+        <property name = "phone_num" column = "phone_num" type = "string"/>
+        <property name = "email" column = "email" type = "string"/>
+
+        <subclass name="com.example.labwork.model.Administrator" discriminator-value="adm_use">
+            <many-to-one name = "dorm" column = "dormnum" unique="true"
+                         class="com.example.labwork.model.Dormitory" not-null="true"/>
+
+        </subclass>
+
+        <subclass name="com.example.labwork.model.Student" discriminator-value="stu_use">
+            <many-to-one name = "issued_room" column = "room_num" unique="true"
+                         class="com.example.labwork.model.Room" not-null="true"/>
+            <property name = "faculty" column = "faculty" type = "string"/>
+
+        </subclass>
+
+    </class>
+    <class name = "com.example.labwork.model.Dormitory" table="dormtable">
+
+
+
+        <id name = "dorm_num" type = "int" column = "dormnum">
+            <generator class="increment"/>
+        </id>
+
+        <property name = "address" column = "address" type = "string"/>
+        <property name = "rooms_count" column = "rooms_count" type = "int"/>
+
+    </class>
+    <class name = "com.example.labwork.model.Room" table="rooms">
+
+
+
+        <id name = "room_num" type = "int" column = "room_num">
+            <generator class="increment"/>
+        </id>
+
+        <property name = "room_type" column = "room_type" type = "string"/>
+        <property name = "issue_date" column = "issue_date" type = "date"/>
+        <property name = "available" column = "room_available" type = "boolean"/>
+
+    </class>
+
+</hibernate-mapping>
